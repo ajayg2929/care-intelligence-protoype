@@ -362,6 +362,14 @@
     "analysis_dirty": false,
     "activity_log": [
       {
+        "timestamp": "2026-04-18 00:48",
+        "note": "User Logged Action: BP check early in the morning"
+      },
+      {
+        "timestamp": "2026-04-18 00:47",
+        "note": "Rejected: Escalate immediately for clinical review \u2014 Feedback: misleading the urgency"
+      },
+      {
         "timestamp": "2026-04-18 00:39",
         "note": "User Logged Action: Keep monitoring the vitals"
       },

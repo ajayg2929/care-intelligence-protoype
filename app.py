@@ -587,7 +587,14 @@ def render_dashboard():
              st.write("")
              st.markdown("#### Upload Documents")
              # User Patient-Specific Uploader Key
-             uploaded_files = st.file_uploader("Upload additional documents", type=["txt", "md", "pdf", "docx", "csv", "xlsx", "json", "png", "jpg", "jpeg", "mp3", "wav"], accept_multiple_files=True, label_visibility="collapsed", key=f"uploader_{pid}")
+             uploaded_files = st.file_uploader(
+                 "Upload additional documents", 
+                 type=["txt", "md", "pdf", "docx", "csv", "xlsx", "json", "png", "jpg", "jpeg", "mp3", "wav"], 
+                 accept_multiple_files=True, 
+                 label_visibility="collapsed", 
+                 key=f"uploader_{pid}",
+                 help="Supported formats: TXT, MD, PDF, DOCX, CSV, XLSX, JSON, PNG, JPG, JPEG, MP3, WAV"
+             )
              
              if uploaded_files:
                  existing_names = [d.get("name") for d in st.session_state.patient_docs[pid]]
