@@ -26,8 +26,8 @@ wheels/
 .flaskenv
 
 # Project Specific Data
-data/patients.json
-data/*.json
+#data/patients.json
+#data/*.json
 
 # Streamlit
 .streamlit/

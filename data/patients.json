@@ -1,0 +1,69 @@
+[
+  {
+    "patient_id": "P001",
+    "name": "John Doe",
+    "age": 68,
+    "gender": "Male",
+    "conditions": [
+      "Type 2 Diabetes",
+      "Chronic Kidney Disease Stage 3"
+    ],
+    "medications": [
+      "Insulin Glargine",
+      "Lisinopril 10mg"
+    ],
+    "latest_vitals": {
+      "blood_pressure": "142/88",
+      "heart_rate": 78,
+      "spo2": 96,
+      "glucose": 145
+    },
+    "last_visit_date": "2023-10-27",
+    "clinical_summary": {
+      "current_status": "John Doe is a 68-year-old male with Type 2 Diabetes and CKD Stage 3, presenting with slightly elevated blood pressure, peripheral edema, and recent fatigue.",
+      "what_changed": "Patient reports missing his lisinopril dose yesterday, and his caregiver noted increased fatigue over the past week.",
+      "observed_symptoms": "Mild peripheral edema in ankles and increased fatigue reported by caregiver.",
+      "treatment_plan": ""
+    },
+    "source_notes": [
+      {
+        "source_label": "Clinical Intake Note",
+        "source_file": "Intake Record",
+        "content": "Patient: John Doe, 68yo Male. History: Type 2 Diabetes, Chronic Kidney Disease Stage 3. Current Meds: Insulin Glargine, Lisinopril 10mg. Vitals captured today at 0900: BP is slightly elevated at 142/88. Heart rate 78. SpO2 96% on room air. Glucose was 145 mg/dL. Nurse Observations: Patient states he missed his lisinopril dose yesterday. Mild peripheral edema noted in ankles. Caregiver daughter reports he has been feeling more fatigued than usual over the last week."
+      }
+    ],
+    "analysis_dirty": false,
+    "analysis_cache": {
+      "summary": "John Doe is a 68-year-old male with Type 2 Diabetes, Chronic Kidney Disease Stage 3. The current intake suggests a low-risk case based on baseline vitals, active care notes, and uploaded documents.",
+      "risk_level": "Low",
+      "risk_score": 31,
+      "priority": "P3",
+      "risk_factors": [
+        {
+          "title": "Fatigue reported",
+          "severity": "Medium",
+          "summary": "Detected clinical indicator: Fatigue reported",
+          "evidence": [
+            {
+              "source_label": "Clinical Intake Note",
+              "file_name": "Intake Record",
+              "excerpt": "...ankles. Caregiver daughter reports he has been feeling more fatigued than usual over the last week.",
+              "reason_tag": "Trend Evidence",
+              "relevance_score": 0.9
+            }
+          ]
+        }
+      ],
+      "recommended_actions": [
+        {
+          "title": "Continue routine monitoring",
+          "severity": "Medium",
+          "summary": "Recommended clinical intervention: Continue routine monitoring",
+          "evidence": []
+        }
+      ],
+      "escalation": "No immediate escalation needed"
+    },
+    "documents": []
+  }
+]
