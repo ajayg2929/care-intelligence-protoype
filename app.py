@@ -737,7 +737,9 @@ def render_dashboard():
             st.info("No recommended actions at this time.")
         else:
             for idx, action_item in enumerate(display_actions):
-                act = action_item["text"]
+                # Ensure we get the title string if the action is a dictionary
+                raw_act = action_item["text"]
+                act = raw_act.get("title", str(raw_act)) if isinstance(raw_act, dict) else raw_act
                 a_type = action_item["type"]
                 # Use a stable UID for session state (type + index)
                 act_uid = f"{pid}_{a_type}_{idx}"
@@ -841,7 +843,7 @@ def render_dashboard():
         row1_cols = st.columns(3)
         for i, col in enumerate(row1_cols):
             if col.button(suggested_questions[i], key=f"sq_{i}", use_container_width=True):
-                ans = answer_patient_question(suggested_questions[i], selected_patient, p_docs)
+                ans = answer_patient_question(suggested_questions[i], selected_patient, current_p_docs)
                 if "chat_history" not in st.session_state: st.session_state.chat_history = []
                 st.session_state.chat_history.append(("You", suggested_questions[i]))
                 st.session_state.chat_history.append(("Assistant", ans))
@@ -865,7 +867,7 @@ def render_dashboard():
         with col_send:
             if st.button("Send Query", type="primary", use_container_width=True):
                 if user_question.strip():
-                    ans = answer_patient_question(user_question, selected_patient, p_docs)
+                    ans = answer_patient_question(user_question, selected_patient, current_p_docs)
                     if "chat_history" not in st.session_state: st.session_state.chat_history = []
                     st.session_state.chat_history.append(("You", user_question))
                     st.session_state.chat_history.append(("Assistant", ans))
