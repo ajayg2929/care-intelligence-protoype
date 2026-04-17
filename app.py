@@ -614,65 +614,6 @@ def render_dashboard():
                      save_patients(patients)
                      st.rerun()
 
-        # ── Document table (Direct from session state) ──
-        st.markdown("---")
-        active_docs = st.session_state.patient_docs.get(pid) or []
-        doc_count = len(active_docs)
-        st.markdown(f"#### Documents on File ({doc_count})")
-        
-        # Show stale-data banner if patient is dirty
-        if st.session_state.analysis_dirty_by_patient.get(pid):
-            st.warning("⚠️ New data added. Click 'Refresh AI Analysis' to update insights.")
-        
-        active_docs = st.session_state.patient_docs.get(pid, [])
-        if active_docs:
-            for idx, f in enumerate(active_docs):
-                dc1, dc2, dc3, dc4, dc5, dc6 = st.columns([2.5, 1, 1.2, 0.8, 0.8, 0.8])
-                dc1.markdown(f"📄 **{f.get('name')}**")
-                dc2.caption(f.get("type", "—").capitalize())
-                dc3.caption(f.get("upload_date", "—"))
-                
-                # View action
-                if dc4.button("👁️ View", key=f"view_doc_{pid}_{idx}", use_container_width=True):
-                    st.session_state[f"show_doc_{pid}_{idx}"] = not st.session_state.get(f"show_doc_{pid}_{idx}", False)
-                
-                # Download action
-                dc5.download_button("⬇️ Download", data=f.get("raw_bytes", b""), file_name=f.get('name'), mime=f.get("mime", "application/octet-stream"), key=f"dl_doc_{pid}_{idx}", use_container_width=True)
-                
-                # Delete action
-                if dc6.button("🗑️ Delete", key=f"del_doc_{pid}_{idx}", use_container_width=True):
-                    st.session_state[f"confirm_del_doc_{pid}_{idx}"] = True
-                
-                # Expandable preview
-                if st.session_state.get(f"show_doc_{pid}_{idx}"):
-                    with st.container(border=True):
-                        preview = f.get("preview", f.get("content", "No preview available"))
-                        if isinstance(preview, str):
-                            st.text(preview[:2000])
-                        else:
-                            st.dataframe(preview)
-                
-                # Confirm delete
-                if st.session_state.get(f"confirm_del_doc_{pid}_{idx}"):
-                    st.warning(f"Delete **{f.get('name')}**? Re-analysis will be required.")
-                    dd1, dd2, dd3 = st.columns([1.5, 1.5, 3])
-                    if dd1.button("Confirm Delete", key=f"yes_del_{pid}_{idx}", type="primary", use_container_width=True):
-                        st.session_state.patient_docs[pid].pop(idx)
-                        st.session_state.analysis_dirty_by_patient[pid] = True
-                        # Update persistence
-                        for p in patients:
-                            if p.get('patient_id') == pid:
-                                p["documents"] = st.session_state.patient_docs[pid]
-                                break
-                        from core.utils import save_patients
-                        save_patients(patients)
-                        st.session_state.pop(f"confirm_del_doc_{pid}_{idx}", None)
-                        st.rerun()
-                    if dd2.button("Cancel", key=f"no_del_{pid}_{idx}", use_container_width=True):
-                        st.session_state.pop(f"confirm_del_doc_{pid}_{idx}", None)
-                        st.rerun()
-        else:
-            st.caption("No external documents uploaded yet.")
 
     with tab_ins:
         st.markdown("### Risk Summary")

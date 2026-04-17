@@ -360,6 +360,16 @@
       }
     ],
     "analysis_dirty": false,
+    "activity_log": [
+      {
+        "timestamp": "2026-04-18 00:39",
+        "note": "User Logged Action: Keep monitoring the vitals"
+      },
+      {
+        "timestamp": "2026-04-18 00:39",
+        "note": "Approved: Escalate immediately for clinical review"
+      }
+    ],
     "analysis_cache": {
       "summary": "Joseph D'Souza is a 69-year-old male with Chronic Obstructive Pulmonary Disease (COPD), Hypertension, Hypoxemia. The current intake suggests a medium-risk case based on baseline vitals, active care notes, and uploaded documents.",
       "risk_level": "Medium",
@@ -475,6 +485,217 @@
               "source_label": "Nurse Note",
               "file_name": "nurse_notes1.txt",
               "excerpt": "2026-04-15: Patient reports mild breathlessness on exertion. SpO2 recorded at 91%. Still able to speak in full sentences.",
+              "reason_tag": "Direct Evidence",
+              "relevance_score": 0.9
+            }
+          ]
+        }
+      ],
+      "escalation": "Maybe - monitor closely and consider follow-up"
+    },
+    "documents": []
+  },
+  {
+    "patient_id": "P004",
+    "name": "Joseph D'Souza",
+    "age": 69,
+    "gender": "Male",
+    "conditions": [
+      "Chronic Obstructive Pulmonary Disease (COPD)",
+      "Hypertension",
+      "Hypoxemia"
+    ],
+    "medications": [
+      "Tiotropium inhaler",
+      "Salbutamol inhaler",
+      "Amlodipine 5 mg"
+    ],
+    "latest_vitals": {
+      "blood_pressure": "130/85",
+      "heart_rate": 94,
+      "spo2": 89,
+      "glucose": 0
+    },
+    "last_visit_date": "2026-04-16",
+    "clinical_summary": {
+      "current_status": "Joseph D'Souza, a 69-year-old male with COPD and hypertension, is experiencing a significant decline in his respiratory status, marked by increased lethargy, fatigue, breathlessness, and a drop in SpO2 to 89%, indicating hypoxemia.",
+      "what_changed": "Since his intake on April 13, 2026, Joseph's SpO2 has decreased from a baseline of 95-96% to 89%, accompanied by new symptoms of increased tiredness, more sleep, reduced eating, and notable breathlessness, especially at night.",
+      "observed_symptoms": "Increased tiredness, lethargy, fatigue, sleeping more in the afternoons, eating less, reduced activity (walking less, preferring to stay in bed, sitting in chair most of the time), mild breathlessness on exertion, increased breathlessness especially at night, somnolence, and SpO2 of 89%.",
+      "treatment_plan": "Increase use of Salbutamol inhaler as needed and monitor SpO2. A prompt pulmonary consult is recommended, and the latest chart should be shown to a pulmonologist urgently. The patient's wife is advised to report any worsening symptoms. Ongoing medications include daily Tiotropium inhaler and Amlodipine 5 mg."
+    },
+    "source_notes": [
+      {
+        "source_label": "Medication List",
+        "source_file": "medications.txt",
+        "content": "Tiotropium inhaler (daily), Salbutamol inhaler (as needed), Amlodipine 5 mg (daily)."
+      },
+      {
+        "source_label": "Vitals Trend",
+        "source_file": "vitals_trend.txt",
+        "content": "SpO2 trend: Day 1 (2026-04-13): 95%, Day 2 (2026-04-14): 93%, Day 3 (2026-04-15): 91%, Day 4 (2026-04-16): 89%. Current Vitals: Blood Pressure: 130/85, Heart Rate: 94 bpm."
+      },
+      {
+        "source_label": "Caregiver Update",
+        "source_file": "caregiver_update.txt",
+        "content": "Date: 2026-04-15: Patient has been more tired than usual. Prefers staying in bed longer. Walking less around the house."
+      },
+      {
+        "source_label": "Caregiver Update",
+        "source_file": "caregiver_update.txt",
+        "content": "Date: 2026-04-16: Patient seems more breathless, especially at night. Sleeping more and eating less. Still insists he is \u201cfine\u201d."
+      },
+      {
+        "source_label": "Nurse Note",
+        "source_file": "nurse_notes2.txt",
+        "content": "Date: 2026-04-16: Patient slightly more breathless than baseline. Reports fatigue and reduced activity. SpO2 recorded at 89%. No emergency symptoms yet, but condition appears to be declining."
+      },
+      {
+        "source_label": "Nurse Note",
+        "source_file": "nurse_notes1.txt",
+        "content": "Date: 2026-04-15: Patient reports mild breathlessness on exertion. SpO2 recorded at 91%. Patient still able to speak in full sentences. No acute distress observed."
+      },
+      {
+        "source_label": "Nurse Note",
+        "source_file": "nurse_notes.txt",
+        "content": "Date: 2026-04-14: Patient stable. No visible distress. SpO2 recorded at 93%. Patient slightly less active than usual but no complaints reported."
+      },
+      {
+        "source_label": "Intake Record",
+        "source_file": "intake_notes.txt",
+        "content": "Patient Name: Joseph D\u2019Souza, Age: 69, Gender: Male. Medical History: Chronic Obstructive Pulmonary Disease (COPD), Controlled hypertension. Reason for Intake: Routine COPD monitoring and evaluation. Baseline: Patient stable at intake with SpO2 around 95\u201396%. No acute respiratory distress at time of admission."
+      },
+      {
+        "source_label": "CRM Record",
+        "source_file": "patient_crm.json",
+        "content": "Patient ID: P004, Full Name: Joseph D'Souza, Age: 69, Gender: Male. Conditions: Chronic Obstructive Pulmonary Disease (COPD), Hypertension (controlled). Medications: Tiotropium inhaler, Salbutamol inhaler, Amlodipine. Baseline Vitals: Blood Pressure: 128/82, Heart Rate: 78 bpm, SpO2: 96%. Last Visit Date: 2026-04-13. Care Status: Active."
+      },
+      {
+        "source_label": "Doctor Note",
+        "source_file": "ChatGPT Image Apr 17, 2026, 12_17_23 PM.png",
+        "content": "Dr. S.K. Rao's note from April 16, 2026: COPD patient showing increased lethargy, reduced activity. Oxygen saturation trend decreased from 95% four days ago to 89%. Reports of somnolence, breathlessness suggest worsening. Diagnosis: COPD with hypoxemia. Consider prompt pulmonary consult due to new hypoxemia and fatigue. Advise increased use of bronchodilator inhaler, monitoring SpO2. Wife to report any worsening of symptoms. Show latest chart to pulmonologist urgently."
+      },
+      {
+        "source_label": "WhatsApp Message",
+        "source_file": "ChatGPT Image Apr 17, 2026, 11_50_33 AM.png",
+        "content": "WhatsApp message from April 16: Joseph has been pretty tired lately, more than usual. Sleeping a lot in the afternoons. Not really moving around much, just sitting in his chair most of the time. He's a bit breathless but says he's feeling okay."
+      }
+    ],
+    "analysis_dirty": false,
+    "analysis_cache": {
+      "summary": "Joseph D'Souza is a 69-year-old male with Chronic Obstructive Pulmonary Disease (COPD), Hypertension, Hypoxemia. The current intake suggests a medium-risk case based on baseline vitals, active care notes, and uploaded documents.",
+      "risk_level": "Medium",
+      "risk_score": 82,
+      "priority": "P2",
+      "risk_factors": [
+        {
+          "title": "Low oxygen saturation (89%)",
+          "severity": "Medium",
+          "summary": "Detected clinical indicator: Low oxygen saturation (89%)",
+          "evidence": [
+            {
+              "source_label": "Vitals Trend",
+              "file_name": "vitals_trend.txt",
+              "excerpt": "SpO2 trend: Day 1 (2026-04-13): 95%, Day 2 (2026-04-14): 93%, Day 3 (2026-04-15): 91%, Day...",
+              "reason_tag": "Trend Evidence",
+              "relevance_score": 0.9
+            },
+            {
+              "source_label": "Caregiver Update",
+              "file_name": "caregiver_update.txt",
+              "excerpt": "Date: 2026-04-16: Patient seems more breathless, especially at night. Sleeping more and eating less. Still insists he is \u201cfine\u201d...",
+              "reason_tag": "Direct Evidence",
+              "relevance_score": 0.9
+            },
+            {
+              "source_label": "Nurse Note",
+              "file_name": "nurse_notes2.txt",
+              "excerpt": "...thless than baseline. Reports fatigue and reduced activity. SpO2 recorded at 89%. No emergency symptoms yet, but condition appears to be declining.",
+              "reason_tag": "Direct Evidence",
+              "relevance_score": 0.9
+            }
+          ]
+        },
+        {
+          "title": "Fatigue reported",
+          "severity": "Medium",
+          "summary": "Detected clinical indicator: Fatigue reported",
+          "evidence": [
+            {
+              "source_label": "Caregiver Update",
+              "file_name": "caregiver_update.txt",
+              "excerpt": "Date: 2026-04-15: Patient has been more tired than usual. Prefers staying in bed longer. Walking less around the house.",
+              "reason_tag": "Direct Evidence",
+              "relevance_score": 0.9
+            },
+            {
+              "source_label": "Nurse Note",
+              "file_name": "nurse_notes2.txt",
+              "excerpt": "...16: Patient slightly more breathless than baseline. Reports fatigue and reduced activity. SpO2 recorded at 89%. No emergency symptoms yet, but conditi...",
+              "reason_tag": "Direct Evidence",
+              "relevance_score": 0.9
+            },
+            {
+              "source_label": "Doctor Note",
+              "file_name": "ChatGPT Image Apr 17, 2026, 12_17_23 PM.png",
+              "excerpt": "...Consider prompt pulmonary consult due to new hypoxemia and fatigue. Advise increased use of bronchodilator inhaler, monitoring SpO2. Wife to report a...",
+              "reason_tag": "Trend Evidence",
+              "relevance_score": 0.9
+            }
+          ]
+        },
+        {
+          "title": "Breathlessness reported",
+          "severity": "High",
+          "summary": "Detected clinical indicator: Breathlessness reported",
+          "evidence": [
+            {
+              "source_label": "Caregiver Update",
+              "file_name": "caregiver_update.txt",
+              "excerpt": "Date: 2026-04-16: Patient seems more breathless, especially at night. Sleeping more and eating less. Still insists he is \u201cfine\u201d...",
+              "reason_tag": "Direct Evidence",
+              "relevance_score": 0.9
+            },
+            {
+              "source_label": "Nurse Note",
+              "file_name": "nurse_notes2.txt",
+              "excerpt": "Date: 2026-04-16: Patient slightly more breathless than baseline. Reports fatigue and reduced activity. SpO2 recorded at 89%. No e...",
+              "reason_tag": "Direct Evidence",
+              "relevance_score": 0.9
+            },
+            {
+              "source_label": "Nurse Note",
+              "file_name": "nurse_notes1.txt",
+              "excerpt": "Date: 2026-04-15: Patient reports mild breathlessness on exertion. SpO2 recorded at 91%. Patient still able to speak in full sent...",
+              "reason_tag": "Direct Evidence",
+              "relevance_score": 0.9
+            }
+          ]
+        }
+      ],
+      "recommended_actions": [
+        {
+          "title": "Escalate immediately for clinical review",
+          "severity": "High",
+          "summary": "Recommended clinical intervention: Escalate immediately for clinical review",
+          "evidence": [
+            {
+              "source_label": "Medication List",
+              "file_name": "medications.txt",
+              "excerpt": "Tiotropium inhaler (daily), Salbutamol inhaler (as needed), Amlodipine 5 mg (daily).",
+              "reason_tag": "Direct Evidence",
+              "relevance_score": 0.9
+            },
+            {
+              "source_label": "Caregiver Update",
+              "file_name": "caregiver_update.txt",
+              "excerpt": "...te: 2026-04-15: Patient has been more tired than usual. Prefers staying in bed longer. Walking less around the house.",
+              "reason_tag": "Direct Evidence",
+              "relevance_score": 0.9
+            },
+            {
+              "source_label": "Nurse Note",
+              "file_name": "nurse_notes2.txt",
+              "excerpt": "...ts fatigue and reduced activity. SpO2 recorded at 89%. No emergency symptoms yet, but condition appears to be declining.",
               "reason_tag": "Direct Evidence",
               "relevance_score": 0.9
             }
