@@ -33,6 +33,7 @@
       }
     ],
     "analysis_dirty": false,
+    "is_archived": true,
     "analysis_cache": {
       "summary": "John Doe is a 68-year-old male with Type 2 Diabetes, Chronic Kidney Disease Stage 3. The current intake suggests a low-risk case based on baseline vitals, active care notes, and uploaded documents.",
       "risk_level": "Low",

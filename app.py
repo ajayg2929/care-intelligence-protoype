@@ -88,102 +88,154 @@ def _time_label(visit_date_str):
 # ═══════════════════════════════════════════════════════════════
 def render_home():
     st.title("AI Care Coordinator ✨")
+    st.caption("Central Clinical Roster & Population Health Insights")
     
-    # Ask AI bar
-    ai_query = st.text_input("Ask anything about your patients...", placeholder="e.g. Who needs attention today?")
+    # 1. Search Bar (Global)
+    ai_query = st.text_input("🔍 Search patient records or ask clinical questions...", placeholder="e.g. Find all COPD patients with SpO2 < 90%")
     if ai_query:
-        with st.spinner("AI analyzing roster..."):
+        with st.spinner("Care Intelligence Engine scanning roster..."):
             answer = analyze_roster_question(ai_query, patients)
             st.info(answer)
 
-    # Separate active vs archived
-    active_patients = [p for p in patients if not p.get("is_archived")]
-    archived_patients = [p for p in patients if p.get("is_archived")]
-
-    # Assess active patients for scores
-    assessed_active = []
-    critical_count = 0
-    needs_review_count = 0
-    
-    for p in active_patients:
-        # Use cache if available, otherwise run a low-cost assessment (no documents)
-        if "analysis_cache" in p:
-            res = p["analysis_cache"]
+    # 2. DEDUPLICATION LOGIC
+    # Group by name, pick the latest visit date
+    unique_patients_map = {}
+    for p in patients:
+        p_name = p.get('name', 'Unknown')
+        if p_name not in unique_patients_map:
+            unique_patients_map[p_name] = p
         else:
-            res = assess_patient(p, [], [])
-            
+            try:
+                current_date = datetime.strptime(p.get('last_visit_date', '1900-01-01'), '%Y-%m-%d').date()
+                existing_date = datetime.strptime(unique_patients_map[p_name].get('last_visit_date', '1900-01-01'), '%Y-%m-%d').date()
+                if current_date > existing_date:
+                    unique_patients_map[p_name] = p
+            except:
+                pass
+    
+    processed_patients = list(unique_patients_map.values())
+
+    # 3. METRICS & ONBOARD (Command Row)
+    total_active_list = [p for p in processed_patients if not p.get('is_archived')]
+    total_archived_list = [p for p in processed_patients if p.get('is_archived')]
+    
+    high_risk_count = 0
+    med_risk_count = 0
+    
+    for p in processed_patients:
+        res = p.get("analysis_cache", {})
+        if not res: 
+             res = {"risk_level": "Low", "risk_score": 0, "priority": "P3"}
         p["_risk_level"] = res.get("risk_level", "Low")
         p["_risk_score"] = res.get("risk_score", 0)
         p["_priority"] = res.get("priority", "P3")
         
-        if p["_risk_level"] == "High":
-            critical_count += 1
-        elif p["_risk_level"] == "Medium":
-            needs_review_count += 1
-        assessed_active.append(p)
+        if not p.get('is_archived'):
+            if p["_risk_level"] == "High": high_risk_count += 1
+            if p["_risk_level"] == "Medium": med_risk_count += 1
 
-    # Metrics row
-    col1, col2, col3, col_onb = st.columns([1, 1, 1, 1.5])
-    col1.metric("Active Patients", len(active_patients))
-    col2.metric("Critical", critical_count)
-    col3.metric("Needs Review", needs_review_count)
-    with col_onb:
-        if st.button("➕ Onboard Patient", type="primary", use_container_width=True):
+    st.write("")
+    m_col1, m_col2, m_col3, m_col4 = st.columns([1, 1, 1, 1.2])
+    with m_col1:
+        st.metric("Total Active", len(total_active_list))
+    with m_col2:
+        st.metric("Critical (High Risk)", high_risk_count)
+    with m_col3:
+        st.metric("Requires Review", med_risk_count)
+    with m_col4:
+        if st.button("➕ Onboard New Patient", type="primary", use_container_width=True):
             nav_onboard()
 
     st.markdown("---")
 
-    # Alert banner
-    high_risk = [p for p in assessed_active if p["_risk_level"] == "High"]
-    if high_risk:
-        st.markdown(f'<div class="risk-high">⚠️ {critical_count} patient(s) need immediate attention. Highest risk: {high_risk[0]["name"]}.</div>', unsafe_allow_html=True)
-    elif needs_review_count > 0:
-        st.markdown(f'<div class="risk-medium">🟡 {needs_review_count} patient(s) scheduled for review today.</div>', unsafe_allow_html=True)
-    else:
-        st.markdown('<div class="risk-low">🟢 All patients are currently stable.</div>', unsafe_allow_html=True)
-    
-    st.write("")
-
-    # ── Active / Archived tabs ──
-    tab_active, tab_archived = st.tabs([f"Active Patients ({len(active_patients)})", f"Archived Patients ({len(archived_patients)})"])
+    # 4. TABS & ROSTER CONTROLS
+    tab_active, tab_archived = st.tabs([f"Active Roster ({len(total_active_list)})", f"Archived Records ({len(total_archived_list)})"])
 
     with tab_active:
-        if not assessed_active:
-            st.info("No active patients. Onboard a new patient to get started.")
+        st.markdown("#### Patient Roster Controls")
+        c_col1, c_col2 = st.columns([1, 1.2])
+        
+        with c_col1:
+            risk_filter = st.selectbox("Filter by Risk", ["All Levels", "High", "Medium", "Low"], index=0, key="risk_filt_home")
+        with c_col2:
+            sort_by = st.selectbox("Sort Roster By", ["Last Visit Date (Newest)", "Risk Level (Highest)", "Priority (Highest)", "Name (A-Z)"], index=0, key="sort_home")
+
+        # Filtering & Sorting
+        display_list = total_active_list
+        if risk_filter != "All Levels":
+            display_list = [p for p in display_list if p.get('_risk_level') == risk_filter]
+
+        if sort_by == "Last Visit Date (Newest)":
+            display_list = sorted(display_list, key=lambda x: x.get('last_visit_date', ''), reverse=True)
+        elif sort_by == "Risk Level (Highest)":
+            display_list = sorted(display_list, key=lambda x: x.get('_risk_score', 0), reverse=True)
+        elif sort_by == "Priority (Highest)":
+            display_list = sorted(display_list, key=lambda x: x.get('_priority', 'P3'))
+        elif sort_by == "Name (A-Z)":
+            display_list = sorted(display_list, key=lambda x: x.get('name', '').lower())
+
+        st.write("")
+        
+        # ALERT BANNER
+        if high_risk_count > 0:
+            st.markdown(f'<div class="risk-high">⚠ {high_risk_count} critical patient records require immediate clinical intervention.</div>', unsafe_allow_html=True)
+        elif med_risk_count > 0:
+            st.markdown(f'<div class="risk-medium">🟡 {med_risk_count} patients flagged for clinical review based on recent telemetry or notes.</div>', unsafe_allow_html=True)
         else:
-            # Sort by risk score (highest first)
-            assessed_active = sorted(assessed_active, key=lambda x: x["_risk_score"], reverse=True)
+            st.markdown(f'<div class="risk-low">🟢 Patient roster is currently stable. No immediate alerts.</div>', unsafe_allow_html=True)
 
-            for p in assessed_active:
+        # RENDERING
+        if not display_list:
+            st.info("No patients found matching the current filters.")
+        else:
+            st.markdown(f"**Showing {len(display_list)} patient record(s)**")
+            h_id, h_name, h_risk, h_pri, h_visit, h_cond, h_action = st.columns([0.6, 1.4, 0.7, 0.6, 0.9, 1.8, 0.8])
+            h_id.caption("PATIENT ID")
+            h_name.caption("NAME & DETAILS")
+            h_risk.caption("RISK")
+            h_pri.caption("PRIORITY")
+            h_visit.caption("LAST VISIT")
+            h_cond.caption("PRIMARY CONDITIONS")
+            h_action.caption("ACTION")
+
+            for p in display_list:
                 time_lbl = _time_label(p.get('last_visit_date', ''))
-                status_icon = "🔴" if p["_risk_level"] == "High" else "🟡" if p["_risk_level"] == "Medium" else "🟢"
+                r_level = p.get("_risk_level", "Low")
+                r_color = "🔴" if r_level == "High" else "🟡" if r_level == "Medium" else "🟢"
                 conds = ", ".join(p.get("conditions", []))
-
+                
                 with st.container(border=True):
-                    c_id, c_name, c_risk, c_pri, c_updated, c_cond, c_action = st.columns([0.6, 1.5, 0.8, 0.5, 0.8, 1.5, 1])
-                    c_id.markdown(f"<span style='color:#64748b; font-size:13px; font-weight:600;'>{p['patient_id']}</span>", unsafe_allow_html=True)
-                    c_name.markdown(f"**{p['name']}** <span style='color:#94a3b8;'>({p['age']}{p.get('gender', '—')[:1]})</span>", unsafe_allow_html=True)
-                    c_risk.markdown(f"{status_icon} **{p['_risk_level']}**")
-                    c_pri.markdown(f"**{p['_priority']}**")
-                    c_updated.markdown(f"<span style='font-size:13px; color:#64748b;'>{time_lbl}</span>", unsafe_allow_html=True)
-                    c_cond.markdown(f"<span style='font-size:13px; color:#475569;'>{conds}</span>", unsafe_allow_html=True)
-                    if c_action.button("View →", key=f"v_{p.get('patient_id')}", use_container_width=True):
-                        nav_dashboard(p.get('patient_id'))
+                    c_id, c_name, c_risk, c_pri, c_visit, c_cond, c_action = st.columns([0.6, 1.4, 0.7, 0.6, 0.9, 1.8, 0.8])
+                    c_id.markdown(f'<div class="roster-row-id">{p["patient_id"]}</div>', unsafe_allow_html=True)
+                    c_name.markdown(f"**{p['name']}**  \n<span style='color:#64748b; font-size:12px;'>{p['age']}{p.get('gender', '—')[:1]}</span>", unsafe_allow_html=True)
+                    c_risk.markdown(f"{r_color} **{r_level}**")
+                    c_pri.markdown(f'<span class="priority-box">{p.get("_priority", "P3")}</span>', unsafe_allow_html=True)
+                    c_visit.markdown(f"<span style='font-size:13px; color:#475569;'>{time_lbl}</span>", unsafe_allow_html=True)
+                    c_cond.markdown(f"<span style='font-size:12px; color:#64748b; line-height:1.2;'>{conds}</span>", unsafe_allow_html=True)
+                    if c_action.button("View →", key=f"view_{p['patient_id']}", use_container_width=True):
+                        nav_dashboard(p['patient_id'])
 
     with tab_archived:
-        if not archived_patients:
-            st.info("No archived patients.")
+        if not total_archived_list:
+            st.info("No archived patient records.")
         else:
-            for p in archived_patients:
+            st.markdown(f"**Showing {len(total_archived_list)} archived record(s)**")
+            h_id, h_name, h_cond, h_action = st.columns([0.6, 2, 3, 1])
+            h_id.caption("PATIENT ID")
+            h_name.caption("NAME")
+            h_cond.caption("CONDITIONS")
+            h_action.caption("RESTORE")
+
+            for p in total_archived_list:
                 conds = ", ".join(p.get("conditions", []))
                 with st.container(border=True):
-                    c_id, c_name, c_cond, c_action = st.columns([0.6, 2, 2, 1])
-                    c_id.markdown(f"<span style='color:#94a3b8; font-size:13px; font-weight:600;'>{p['patient_id']}</span>", unsafe_allow_html=True)
-                    c_name.markdown(f"**{p['name']}** <span style='color:#94a3b8;'>({p['age']}{p.get('gender', '—')[:1]})</span>", unsafe_allow_html=True)
-                    c_cond.markdown(f"<span style='font-size:13px; color:#94a3b8;'>{conds}</span>", unsafe_allow_html=True)
-                    if c_action.button("♻️ Restore", key=f"r_{p.get('patient_id')}", use_container_width=True):
-                        restore_patient(p.get('patient_id'))
-                        st.toast(f"{p.get('name')} restored to active roster.")
+                    c_id, c_name, c_cond, c_action = st.columns([0.6, 2, 3, 1])
+                    c_id.markdown(f'<div class="roster-row-id">{p["patient_id"]}</div>', unsafe_allow_html=True)
+                    c_name.markdown(f"**{p['name']}** <span style='color:#64748b;'>({p['age']}{p.get('gender', '—')[:1]})</span>", unsafe_allow_html=True)
+                    c_cond.markdown(f"<span style='font-size:13px; color:#64748b;'>{conds}</span>", unsafe_allow_html=True)
+                    if c_action.button("♻ Restore", key=f"restore_{p['patient_id']}", use_container_width=True):
+                        restore_patient(p['patient_id'])
+                        st.toast(f"{p['name']} restored to active roster.")
                         st.rerun()
 
 

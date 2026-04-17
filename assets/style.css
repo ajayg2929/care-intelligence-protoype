@@ -1,15 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
+:root {
+    --primary-color: #1d4ed8;
+}
+
 html, body, .stApp, .stMarkdown, p, h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', sans-serif;
 }
 
 .main {
-    background-color: #fafafa;
+    background-color: #f8fafc;
+}
+
+/* Tab styling override to match blue theme */
+.stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.stTabs [data-baseweb="tab-highlight"] {
+    background-color: #1d4ed8 !important;
+}
+
+.stTabs [aria-selected="true"] {
+    color: #1d4ed8 !important;
 }
 
 .block-container {
-    padding-bottom: 2rem;
+    padding-bottom: 3rem;
     max-width: 1280px;
 }
 
@@ -21,6 +39,19 @@ html, body, .stApp, .stMarkdown, p, h1, h2, h3, h4, h5, h6 {
     font-weight: 300;
 }
 
+/* Metric card specific alignment */
+[data-testid="stMetricValue"] {
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+}
+
+[data-testid="stMetricLabel"] {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+}
+
 /* Premium Card Design */
 .soft-card {
     background: #ffffff;
@@ -28,28 +59,8 @@ html, body, .stApp, .stMarkdown, p, h1, h2, h3, h4, h5, h6 {
     border-radius: 16px;
     padding: 20px;
     margin-bottom: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.soft-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-}
-
-.soft-card-title {
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #94a3b8;
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-
-.soft-card-value {
-    font-size: 24px;
-    font-weight: 700;
-    color: #0f172a;
 }
 
 .section-card {
@@ -61,90 +72,92 @@ html, body, .stApp, .stMarkdown, p, h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
 }
 
-.section-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 16px;
-}
-
-.mini-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #475569;
-    margin-bottom: 6px;
-}
-
-/* Summary Card */
-.summary-card {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    border: 1px solid #cbd5e1;
-    border-radius: 20px;
-    padding: 24px;
-    margin-bottom: 20px;
-    box-shadow: inset 0 2px 4px 0 rgba(255, 255, 255, 0.5);
-}
-
-/* Status Indicators */
+/* Status Indicators - Redesigned to be lighter */
 .risk-high {
-    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    background: #fef2f2;
     border: 1px solid #fecaca;
     color: #b91c1c;
     border-radius: 12px;
-    padding: 14px 16px;
+    padding: 12px 16px;
     font-weight: 600;
-    box-shadow: 0 2px 4px rgba(185, 28, 28, 0.05);
 }
 
 .risk-medium {
-    background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
-    border: 1px solid #fed7aa;
-    color: #c2410c;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
     border-radius: 12px;
-    padding: 14px 16px;
+    padding: 12px 16px;
     font-weight: 600;
-    box-shadow: 0 2px 4px rgba(194, 65, 12, 0.05);
 }
 
 .risk-low {
-    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    background: #f0fdf4;
     border: 1px solid #bbf7d0;
     color: #15803d;
     border-radius: 12px;
-    padding: 14px 16px;
+    padding: 12px 16px;
     font-weight: 600;
-    box-shadow: 0 2px 4px rgba(21, 128, 61, 0.05);
 }
 
 .priority-box {
-    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    background: #eff6ff;
     border: 1px solid #bfdbfe;
     color: #1d4ed8;
     border-radius: 12px;
-    padding: 14px 16px;
-    font-weight: 600;
-    box-shadow: 0 2px 4px rgba(29, 78, 216, 0.05);
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 700;
 }
 
-.escalation-box {
-    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-    border: 1px solid #e9d5ff;
-    color: #7e22ce;
+/* Roster Controls */
+.roster-controls {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 12px 16px;
     border-radius: 12px;
-    padding: 14px 16px;
+    margin-bottom: 20px;
+}
+
+/* Row Styling */
+.roster-row-view {
+    font-size: 14px;
+    color: #1d4ed8;
     font-weight: 600;
-    box-shadow: 0 2px 4px rgba(126, 34, 206, 0.05);
+}
+
+.roster-row-id {
+    font-size: 12px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
+
+/* Force Streamlit Primary Button to Blue */
+button[kind="primary"] {
+    background-color: #1d4ed8 !important;
+    border-color: #1d4ed8 !important;
+    color: white !important;
+}
+
+button[kind="primary"]:hover {
+    background-color: #1e40af !important;
+    border-color: #1e40af !important;
+}
+
+/* Force Input Focus to Blue */
+input:focus, textarea:focus, .stTextInput > div > div > input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
 }
 
 /* Chat Styling */
 .chat-user {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: #1d4ed8;
     color: white;
     padding: 12px 18px;
     border-radius: 18px 18px 4px 18px;
-    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
-    font-size: 15px;
-    max-width: 75%;
+    box-shadow: 0 4px 6px rgba(29, 78, 216, 0.15);
 }
 
 .chat-assistant {
@@ -152,7 +165,6 @@ html, body, .stApp, .stMarkdown, p, h1, h2, h3, h4, h5, h6 {
     border: 1px solid #e2e8f0;
     padding: 12px 16px;
     border-radius: 12px 12px 12px 0;
-    max-width: 85%;
 }
 
 .riskBg-high {
@@ -171,65 +183,4 @@ html, body, .stApp, .stMarkdown, p, h1, h2, h3, h4, h5, h6 {
     background-color: #f0fdf4;
     color: #22c55e;
     border: 1px solid #86efac;
-}
-
-/* Chips */
-.source-chip {
-    display: inline-block;
-    background: #f1f5f9;
-    border: 1px solid #cbd5e1;
-    border-radius: 999px;
-    padding: 6px 14px;
-    margin: 4px 8px 4px 0;
-    font-size: 13px;
-    font-weight: 500;
-    color: #475569;
-    transition: background 0.2s;
-}
-
-.source-chip:hover {
-    background: #e2e8f0;
-}
-
-
-.small-note {
-    color: #94a3b8;
-    font-size: 13px;
-    margin-top: 10px;
-}
-
-/* Redesigned Uploader Styling - More aggressive suppression */
-[data-testid="stFileUploaderSmallText"],
-[data-testid="stFileUploader"] small,
-[data-testid="stFileUploader"] section > div:not(:first-child) {
-    display: none !important;
-    height: 0 !important;
-    overflow: hidden !important;
-}
-
-/* Ensure the button itself remains visible */
-[data-testid="stFileUploader"] section button {
-    display: inline-flex !important;
-}
-
-.upload-helper-container {
-    margin-top: 12px;
-    padding: 0 4px;
-}
-
-.upload-helper-text {
-    font-size: 13px;
-    color: #64748b;
-    line-height: 1.5;
-    word-wrap: break-word;
-}
-
-.upload-helper-bold {
-    font-weight: 600;
-    color: #475569;
-}
-
-/* Ensure the uploader box is concise */
-[data-testid="stFileUploader"] section {
-    padding: 1rem !important;
 }
