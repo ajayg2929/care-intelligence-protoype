@@ -292,9 +292,40 @@ def render_onboard():
             uploaded_files = st.file_uploader("Upload", type=["txt", "md", "pdf", "docx", "csv", "xlsx", "json", "png", "jpg", "jpeg", "mp3", "wav"], accept_multiple_files=True, label_visibility="collapsed")
             
             st.write("")
-            col_ext, col_dem = st.columns(2)
-            trigger_extract = col_ext.button("🤖 AI Extract", type="primary", use_container_width=True, disabled=not uploaded_files)
-            trigger_demo = col_dem.button("Try Sample Patient", use_container_width=True)
+            # Initialize error state if not present
+            if "extraction_error" not in st.session_state:
+                st.session_state.extraction_error = None
+            
+            if st.session_state.extraction_error:
+                st.markdown(f"""
+                <div style='background:#fff7ed; border-left:4px solid #f97316; padding:16px; border-radius:8px; margin-bottom:20px;'>
+                    <div style='color:#9a3412; font-weight:700; font-size:15px;'>⚠️ Service High Demand</div>
+                    <div style='color:#c2410c; font-size:14px; margin-top:4px;'>
+                        AI is currently experiencing high demand and could not process your documents. 
+                        You can retry the analysis or proceed with manual data entry.
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                err_col1, err_col2 = st.columns(2)
+                if err_col1.button("🔄 Retry AI Extraction", type="primary", use_container_width=True):
+                    st.session_state.extraction_error = None
+                    st.rerun()
+                if err_col2.button("✍️ Continue Manually", use_container_width=True):
+                    # Proceed with empty template but link source documents
+                    st.session_state.extraction_error = None
+                    st.session_state.extracted_patient = {
+                        "name": "", "age": 0, "gender": "", "conditions": [], "medications": [],
+                        "latest_vitals": {"blood_pressure": "120/80", "heart_rate": 0, "spo2": 0, "glucose": 0},
+                        "last_visit_date": datetime.now().strftime("%Y-%m-%d"),
+                        "clinical_summary": {"current_status": "", "what_changed": "", "observed_symptoms": "", "treatment_plan": ""},
+                        "source_notes": [{"source_label": "Direct Upload", "source_file": f.name, "content": "Refer to original document contents."} for f in uploaded_files]
+                    }
+                    st.rerun()
+
+            c_bt1, c_bt2 = st.columns(2)
+            trigger_extract = c_bt1.button("🤖 AI Extract", type="primary", use_container_width=True, disabled=not uploaded_files or st.session_state.extraction_error is not None)
+            trigger_demo = c_bt2.button("Try Sample Patient", use_container_width=True)
             
             if trigger_extract or trigger_demo:
                 document_contents = []
@@ -322,8 +353,8 @@ def render_onboard():
                     with progress_placeholder:
                         render_progress_bar("2")
                         
-                    with st.status("Initializing AI Agent...", expanded=True) as status:
-                        st.write("Reading clinical documents & extracting data...")
+                    with st.status("AI is analyzing documents...", expanded=True) as status:
+                        st.write("Cross-referencing symptoms & structured data...")
                         
                         try:
                             extracted_data = extract_patient_data_via_gemini(document_contents)
@@ -335,10 +366,13 @@ def render_onboard():
                             # Override with deterministic sequential ID
                             extracted_data["patient_id"] = get_next_patient_id()
                             st.session_state.extracted_patient = extracted_data
+                            st.session_state.extraction_error = None
                             status.update(label="Extraction Complete!", state="complete", expanded=False)
                             st.rerun() 
                         except Exception as e:
-                            status.update(label=f"Extraction failed: {str(e)}", state="error", expanded=False)
+                            st.session_state.extraction_error = str(e)
+                            status.update(label="Service unavailable. Please see alerts.", state="error", expanded=False)
+                            st.rerun()
                 else:
                     st.warning("No readable text or data found in uploads.")
                     

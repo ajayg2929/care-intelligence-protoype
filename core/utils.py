@@ -528,22 +528,33 @@ Schema:
         else:
             payload.append(str(item))
 
-    try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=payload,
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json"
+    import time
+    
+    max_retries = 3
+    retry_delay = 2
+    
+    for attempt in range(max_retries):
+        try:
+            response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=payload,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json"
+                )
             )
-        )
-    except Exception as e:
-        raise Exception(f"Failed to communicate with AI service: {str(e)}. Please check API key and model availability.")
-        
-    try:
-        data = json.loads(response.text)
-        return data
-    except json.JSONDecodeError:
-        raise Exception(f"Failed to parse LLM response into JSON. Raw: {response.text}")
+            data = json.loads(response.text)
+            return data
+        except Exception as e:
+            # Internal logging
+            print(f"[INTERNAL LOG] AI Extraction attempt {attempt+1} failed: {str(e)}")
+            if attempt < max_retries - 1:
+                time.sleep(retry_delay)
+            else:
+                # After all retries fail, raise a clean exception
+                raise Exception("AI_SERVICE_UNAVAILABLE")
+        except json.JSONDecodeError as e:
+             print(f"[INTERNAL LOG] Post-AI JSON Parsing failed: {str(e)}")
+             raise Exception("DATA_PARSING_ERROR")
 
 def save_new_patient(patient_dict):
     patients = load_json("data/patients.json")
