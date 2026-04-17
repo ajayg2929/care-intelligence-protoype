@@ -191,8 +191,45 @@ html, body, .stApp, .stMarkdown, p, h1, h2, h3, h4, h5, h6 {
     background: #e2e8f0;
 }
 
+
 .small-note {
     color: #94a3b8;
     font-size: 13px;
     margin-top: 10px;
+}
+
+/* Redesigned Uploader Styling - More aggressive suppression */
+[data-testid="stFileUploaderSmallText"],
+[data-testid="stFileUploader"] small,
+[data-testid="stFileUploader"] section > div:not(:first-child) {
+    display: none !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Ensure the button itself remains visible */
+[data-testid="stFileUploader"] section button {
+    display: inline-flex !important;
+}
+
+.upload-helper-container {
+    margin-top: 12px;
+    padding: 0 4px;
+}
+
+.upload-helper-text {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.upload-helper-bold {
+    font-weight: 600;
+    color: #475569;
+}
+
+/* Ensure the uploader box is concise */
+[data-testid="stFileUploader"] section {
+    padding: 1rem !important;
 }

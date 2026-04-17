@@ -592,9 +592,20 @@ def render_dashboard():
                  type=["txt", "md", "pdf", "docx", "csv", "xlsx", "json", "png", "jpg", "jpeg", "mp3", "wav"], 
                  accept_multiple_files=True, 
                  label_visibility="collapsed", 
-                 key=f"uploader_{pid}",
-                 help="Supported formats: TXT, MD, PDF, DOCX, CSV, XLSX, JSON, PNG, JPG, JPEG, MP3, WAV"
+                 key=f"uploader_{pid}"
              )
+             
+             # Custom Helper Text below uploader
+             st.markdown(f"""
+             <div class="upload-helper-container">
+                <div class="upload-helper-text">
+                    <span class="upload-helper-bold">Supported file types:</span> TXT, MD, PDF, DOCX, CSV, XLSX, JSON, JPG, JPEG, PNG, MP3, WAV
+                </div>
+                <div class="upload-helper-text" style="margin-top:2px;">
+                    <span class="upload-helper-bold">Max size:</span> 200MB per file
+                </div>
+             </div>
+             """, unsafe_allow_html=True)
              
              if uploaded_files:
                  existing_names = [d.get("name") for d in st.session_state.patient_docs[pid]]
