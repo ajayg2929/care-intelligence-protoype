@@ -720,8 +720,8 @@ def render_dashboard():
         if "action_states" not in st.session_state:
             st.session_state.action_states = {}
             
-        # 1. Normalize AI actions
-        ai_actions_raw = normalize_list(res.get('recommended_actions', []))
+        # 1. Get AI actions
+        ai_actions_raw = res.get('recommended_actions', [])
         
         # 2. Get Custom actions for this patient
         custom_actions_raw = st.session_state.custom_actions.get(pid, [])

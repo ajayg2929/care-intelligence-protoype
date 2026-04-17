@@ -433,17 +433,22 @@ def answer_patient_question(question, patient, parsed_files):
         index, ref_chunks = build_faiss_index(chunks)
         if index is not None:
             q_vec = hash_text_to_vector(q).reshape(1, -1)
-            D, I = index.search(q_vec, min(5, len(chunks)))
+            D, I = index.search(q_vec, min(10, len(chunks)))
             if len(D) > 0 and D[0][0] > 0.05:
-                # Top 3-5 best vector matches across all parsed docs & vitals
+                # Top 10 best vector matches across all parsed docs & vitals
                 best_matches = [ref_chunks[i] for i in I[0] if i < len(ref_chunks)]
                 
     client = get_ai_client()
     if client and best_matches:
         try:
             prompt = f"""You are a helpful AI Care Coordinator Assistant. 
-You must answer the user's question accurately using ONLY the Provided Context. 
+You must answer the user's question accurately using the Patient Profile and Provided Context. 
 Do not hallucinate any medical data or vitals. 
+
+Patient Profile:
+- Name: {patient.get('name')}
+- Age: {patient.get('age')}
+- Gender: {patient.get('gender')}
 
 Provided Context from Vector Search:
 {chr(10).join(best_matches)}
