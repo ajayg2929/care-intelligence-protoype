@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+html, body, .stApp, .stMarkdown, p, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+}
+
+.main {
+    background-color: #fafafa;
+}
+
+.block-container {
+    padding-bottom: 2rem;
+    max-width: 1280px;
+}
+
+.app-subtitle {
+    color: #64748b;
+    font-size: 16px;
+    margin-top: -8px;
+    margin-bottom: 24px;
+    font-weight: 300;
+}
+
+/* Premium Card Design */
+.soft-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.soft-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+}
+
+.soft-card-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.soft-card-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.section-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 16px;
+}
+
+.mini-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+/* Summary Card */
+.summary-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 2px 4px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Status Indicators */
+.risk-high {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(185, 28, 28, 0.05);
+}
+
+.risk-medium {
+    background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+    border: 1px solid #fed7aa;
+    color: #c2410c;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(194, 65, 12, 0.05);
+}
+
+.risk-low {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #bbf7d0;
+    color: #15803d;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(21, 128, 61, 0.05);
+}
+
+.priority-box {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(29, 78, 216, 0.05);
+}
+
+.escalation-box {
+    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+    border: 1px solid #e9d5ff;
+    color: #7e22ce;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(126, 34, 206, 0.05);
+}
+
+/* Chat Styling */
+.chat-user {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 18px 18px 4px 18px;
+    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+    font-size: 15px;
+    max-width: 75%;
+}
+
+.chat-assistant {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    border-radius: 12px 12px 12px 0;
+    max-width: 85%;
+}
+
+.riskBg-high {
+    background-color: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fca5a5;
+}
+
+.riskBg-medium {
+    background-color: #fffbeb;
+    color: #f59e0b;
+    border: 1px solid #fcd34d;
+}
+
+.riskBg-low {
+    background-color: #f0fdf4;
+    color: #22c55e;
+    border: 1px solid #86efac;
+}
+
+/* Chips */
+.source-chip {
+    display: inline-block;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    padding: 6px 14px;
+    margin: 4px 8px 4px 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    transition: background 0.2s;
+}
+
+.source-chip:hover {
+    background: #e2e8f0;
+}
+
+.small-note {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-top: 10px;
+}
