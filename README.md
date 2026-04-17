@@ -2,8 +2,6 @@
 
 A clinically-focused AI command center designed to transform scattered health data (voice, text, images, and documents) into structured, actionable insights for care teams.
 
-![Dashboard Preview](assets/dashboard_preview.png) *(Note: Placeholder for actual screenshot)*
-
 ## 🚀 Key Features
 
 - **Multimodal AI Intake**: Process unstructured voice recordings, handwritten notes, PDFs, and structured clinical data using Google's Gemini 2.5 Flash.
