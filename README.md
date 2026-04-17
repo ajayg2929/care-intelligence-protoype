@@ -46,7 +46,6 @@ A clinically-focused AI command center designed to transform scattered health da
 
 ## 🔒 Security & Privacy (HIPAA Consideration)
 
-- This prototype uses local JSON persistence (`data/patients.json`) which is excluded from the Git repository via `.gitignore`.
 - Encrypted Base64 serialization is used for document storage.
 - **Warning**: Ensure you do not upload real PHI (Protected Health Information) to any AI service without a Business Associate Agreement (BAA) in place.
 
