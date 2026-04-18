@@ -530,31 +530,58 @@ Schema:
 
     import time
     
-    max_retries = 3
-    retry_delay = 2
+    # Priority list based on user's authorized model registry
+    models_to_try = [
+        "gemini-2.5-flash",
+        "gemini-2.0-flash",
+        "gemini-1.5-pro", # Strongest secondary fallback
+        "gemini-1.5-flash"
+    ]
     
-    for attempt in range(max_retries):
-        try:
-            response = client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=payload,
-                config=types.GenerateContentConfig(
-                    response_mime_type="application/json"
+    max_retries_per_model = 2
+    retry_delay = 1.5
+    
+    last_error = ""
+    
+    for model_name in models_to_try:
+        print(f"[INTERNAL LOG] Attempting extraction with model: {model_name}")
+        for attempt in range(max_retries_per_model):
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=payload,
+                    config=types.GenerateContentConfig(
+                        response_mime_type="application/json"
+                    )
                 )
-            )
-            data = json.loads(response.text)
-            return data
-        except Exception as e:
-            # Internal logging
-            print(f"[INTERNAL LOG] AI Extraction attempt {attempt+1} failed: {str(e)}")
-            if attempt < max_retries - 1:
-                time.sleep(retry_delay)
-            else:
-                # After all retries fail, raise a clean exception
-                raise Exception("AI_SERVICE_UNAVAILABLE")
-        except json.JSONDecodeError as e:
-             print(f"[INTERNAL LOG] Post-AI JSON Parsing failed: {str(e)}")
-             raise Exception("DATA_PARSING_ERROR")
+                data = json.loads(response.text)
+                print(f"[INTERNAL LOG] Successful extraction using {model_name}")
+                return data
+            except Exception as e:
+                err_msg = str(e).lower()
+                last_error = err_msg
+                print(f"[INTERNAL LOG] Model {model_name} attempt {attempt+1} failed: {str(e)}")
+                
+                # Fatal errors that shouldn't be retried
+                if "api_key_invalid" in err_msg or "unauthorized" in err_msg or "401" in err_msg:
+                    raise Exception("INVALID_API_KEY")
+                if "safety" in err_msg:
+                    raise Exception("SAFETY_FILTER_BLOCK")
+                
+                if attempt < max_retries_per_model - 1:
+                    time.sleep(retry_delay)
+                else:
+                    # Move to next model in priority list
+                    break
+                    
+        # If we reached here, this model failed after its retries
+        continue
+
+    # If all models fail
+    if "429" in last_error or "quota" in last_error or "rate" in last_error:
+        raise Exception("RATE_LIMIT_EXCEEDED")
+    
+    raise Exception("AI_SERVICE_UNAVAILABLE")
 
 def save_new_patient(patient_dict):
     patients = load_json("data/patients.json")
@@ -623,11 +650,11 @@ def restore_patient(patient_id):
     save_patients(patients)
 
 def get_next_patient_id():
-    base_dir = os.path.dirname(os.path.dirname(__file__))
-    file_path = os.path.join(base_dir, "data/patients.json")
-    with open(file_path, "r", encoding="utf-8") as f:
-        patients = json.load(f)
-    max_num = 0
+    patients = load_json("data/patients.json")
+    if not patients:
+        return "P101"
+        
+    max_num = 100
     for p in patients:
         pid = p.get("patient_id", "")
         if pid.startswith("P") and pid[1:].isdigit():

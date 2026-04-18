@@ -297,13 +297,28 @@ def render_onboard():
                 st.session_state.extraction_error = None
             
             if st.session_state.extraction_error:
+                err_code = st.session_state.extraction_error
+                
+                title = "⚠️ Service High Demand"
+                msg = "AI is currently experiencing high demand. Please retry or proceed manually."
+                
+                if err_code == "INVALID_API_KEY":
+                    title = "🔒 API Authentication Error"
+                    msg = "Your Gemini API Key is invalid or unauthorized. Please check your .env configuration."
+                elif err_code == "MODEL_NOT_FOUND":
+                    title = "🚫 Model Configuration Error"
+                    msg = "The requested AI model could not be found. Please contact support."
+                elif err_code == "SAFETY_FILTER_BLOCK":
+                    title = "🛡️ Content Filter Triggered"
+                    msg = "The uploaded documents were blocked by AI safety filters (likely due to highly sensitive clinical content)."
+                elif err_code == "RATE_LIMIT_EXCEEDED":
+                    title = "⏳ Rate Limit Reached"
+                    msg = "You have reached your AI API quota. Please wait a moment before retrying."
+
                 st.markdown(f"""
                 <div style='background:#fff7ed; border-left:4px solid #f97316; padding:16px; border-radius:8px; margin-bottom:20px;'>
-                    <div style='color:#9a3412; font-weight:700; font-size:15px;'>⚠️ Service High Demand</div>
-                    <div style='color:#c2410c; font-size:14px; margin-top:4px;'>
-                        AI is currently experiencing high demand and could not process your documents. 
-                        You can retry the analysis or proceed with manual data entry.
-                    </div>
+                    <div style='color:#9a3412; font-weight:700; font-size:15px;'>{title}</div>
+                    <div style='color:#c2410c; font-size:14px; margin-top:4px;'>{msg}</div>
                 </div>
                 """, unsafe_allow_html=True)
                 
@@ -354,7 +369,7 @@ def render_onboard():
                         render_progress_bar("2")
                         
                     with st.status("AI is analyzing documents...", expanded=True) as status:
-                        st.write("Cross-referencing symptoms & structured data...")
+                        st.write("Cross-referencing symptoms across multiple data sources...")
                         
                         try:
                             extracted_data = extract_patient_data_via_gemini(document_contents)
@@ -367,11 +382,12 @@ def render_onboard():
                             extracted_data["patient_id"] = get_next_patient_id()
                             st.session_state.extracted_patient = extracted_data
                             st.session_state.extraction_error = None
-                            status.update(label="Extraction Complete!", state="complete", expanded=False)
+                            status.update(label="AI Analysis Complete!", state="complete", expanded=False)
+                            time.sleep(0.5)
                             st.rerun() 
                         except Exception as e:
                             st.session_state.extraction_error = str(e)
-                            status.update(label="Service unavailable. Please see alerts.", state="error", expanded=False)
+                            status.update(label="AI service unavailable. See clinical alert.", state="error", expanded=False)
                             st.rerun()
                 else:
                     st.warning("No readable text or data found in uploads.")
