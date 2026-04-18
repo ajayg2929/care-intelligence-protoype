@@ -457,7 +457,7 @@ User Question: {question}
 Answer:"""
             
             response = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model="gemini-3-flash-preview",
                 contents=prompt
             )
             return response.text
@@ -532,14 +532,15 @@ Schema:
     
     # Priority list based on user's authorized model registry
     models_to_try = [
+        "gemini-3.1-flash-lite-preview",
+        "gemini-3-flash-preview",
         "gemini-2.5-flash",
         "gemini-2.0-flash",
-        "gemini-1.5-pro", # Strongest secondary fallback
-        "gemini-1.5-flash"
+        "gemini-1.5-pro"
     ]
     
-    max_retries_per_model = 2
-    retry_delay = 1.5
+    max_retries_per_model = 4
+    retry_delay = 3
     
     last_error = ""
     
@@ -611,7 +612,7 @@ Question: {question}
 Answer:"""
     try:
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3-flash-preview",
             contents=prompt
         )
         return response.text
