@@ -323,9 +323,9 @@ def render_onboard():
                     }
                     st.rerun()
 
-            c_bt1, c_bt2 = st.columns(2)
-            trigger_extract = c_bt1.button("🤖 AI Extract", type="primary", use_container_width=True, disabled=not uploaded_files or st.session_state.extraction_error is not None)
-            trigger_demo = c_bt2.button("Try Sample Patient", use_container_width=True)
+            col_ext, col_dem = st.columns(2)
+            trigger_extract = col_ext.button("🤖 AI Extract", type="primary", use_container_width=True, disabled=not uploaded_files or st.session_state.extraction_error is not None)
+            trigger_demo = col_dem.button("Try Sample Patient", use_container_width=True)
             
             if trigger_extract or trigger_demo:
                 document_contents = []
